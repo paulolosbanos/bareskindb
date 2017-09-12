@@ -1,0 +1,35 @@
+# Routes Config
+#
+# This file defines all application routes (Higher priority routes first)
+#
+
+module:testrunner
+# module:jobs
+
+
+GET                 /                   App.Index
+GET                 /user/:id           UserCtrl.Get
+POST                /user               UserCtrl.Add
+PUT                 /user/:id           UserCtrl.Update
+DELETE              /user/:id           UserCtrl.Delete
+GET                 /users              UserCtrl.List
+
+#Bareskin Endpoints
+POST                /login              LoginCtrl.Auth
+POST                /order/submit/:id   OrderCtrl.Submit
+POST                /sale/submit        SaleCtrl.Submit
+POST                /member/add         MemberCtrl.Add
+POST                /product/add        ProductCtrl.Add
+
+GET                 /sale/history/:id   SaleCtrl.History
+GET                 /products           ProductCtrl.List
+GET                 /members            MemberCtrl.List
+
+# Ignore favicon requests
+GET     /favicon.ico                            404
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/*filepath                       Static.Serve("public")
+
+# Catch all
+*       /:controller/:action                    :controller.:action
