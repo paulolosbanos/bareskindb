@@ -15,15 +15,15 @@ DELETE              /user/:id           UserCtrl.Delete
 GET                 /users              UserCtrl.List
 
 #Bareskin Endpoints
-POST                /login              LoginCtrl.Auth
-POST                /order/submit/:id   OrderCtrl.Submit
-POST                /sale/submit        SaleCtrl.Submit
-POST                /member/add         MemberCtrl.Add
-POST                /product/add        ProductCtrl.Add
+#POST                /login              LoginCtrl.Auth
+#POST                /order/submit/:id   OrderCtrl.Submit
+#POST                /sale/submit        SaleCtrl.Submit
+#POST                /member/add         MemberCtrl.Add
+#POST                /product/add        ProductCtrl.Add
 
-GET                 /sale/history/:id   SaleCtrl.History
-GET                 /products           ProductCtrl.List
-GET                 /members            MemberCtrl.List
+#GET                 /sale/history/:id   SaleCtrl.History
+#GET                 /products           ProductCtrl.List
+#GET                 /members            MemberCtrl.List
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
