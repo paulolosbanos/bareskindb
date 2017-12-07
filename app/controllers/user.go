@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/revel/revel"
-	"bareskin-api/app/models"
-	//"encoding/json"
+	"bareskin-api/app/models/db"
+	"bareskin-api/app/models/domain"
 )
 
 type UserCtrl struct {
@@ -14,8 +14,8 @@ type UserCtrl struct {
 //	return c.RenderJSON(users)
 //}
 
-func (c UserCtrl) parseUser() (models.User, error) {
-	user := models.User{}
+func (c UserCtrl) parseUser() (db.User, error) {
+	user := db.User{}
 	err := c.Params.BindJSON(&user)
 	//json.NewDecoder(c.Request.Body).Decode(&user)
 	return user, err
@@ -42,9 +42,9 @@ func (c UserCtrl) Add() revel.Result {
 }
 
 func (c UserCtrl) Get(id int64) revel.Result {
-	user := new(models.User)
+	user := new(db.User)
 	err := c.Txn.SelectOne(user,
-		`SELECT * FROM User WHERE id = ?`, id)
+		`SELECT * FROM User WHERE user_id = ?`, id)
 	if err != nil {
 		return c.RenderText("Error.  Item probably doesn't exist.")
 	}
@@ -52,13 +52,9 @@ func (c UserCtrl) Get(id int64) revel.Result {
 }
 
 func (c UserCtrl) List() revel.Result {
-	lastId := parseIntOrDefault(c.Params.Get("lid"), -1)
-	limit := parseUintOrDefault(c.Params.Get("limit"), uint64(25))
-	users, err := c.Txn.Select(models.User{},
-		`SELECT * FROM User WHERE Id > ? LIMIT ?`, lastId, limit)
+	users, err := c.Txn.Select(db.User{}, `SELECT * FROM User`)
 	if err != nil {
-		return c.RenderText(
-			"Error trying to get records from DB.")
+		return c.RenderJSON(domain.JSONError(err.Error()))
 	}
 	return c.RenderJSON(users)
 }
@@ -78,7 +74,7 @@ func (c UserCtrl) Update(id int64) revel.Result {
 }
 
 func (c UserCtrl) Delete(id int64) revel.Result {
-	success, err := c.Txn.Delete(&models.User{Id: id})
+	success, err := c.Txn.Delete(&db.User{Id: id})
 	if err != nil || success == 0 {
 		return c.RenderText("Failed to remove User")
 	}
